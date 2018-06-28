@@ -8,6 +8,7 @@ Vagrant.configure("2") do |config|
   (1..NODE_COUNT).each do |i|
     config.vm.define "node-#{i}" do |subconfig|
       subconfig.vm.box = BOX_IMAGE
+      subconfig.vm.box_check_update = false
       subconfig.vm.hostname = "docker-#{i}"
       subconfig.vm.network "private_network", ip: "10.10.10.#{ i * 10 }"
       subconfig.vm.provider "virtualbox" do |v|
@@ -18,6 +19,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell", inline: <<-SHELL
+    sudo timedatectl set-timezone Asia/Seoul
     sudo apt-get -y install vim
     sudo apt-get -y remove docker docker-engine docker.io
     sudo apt-get update
